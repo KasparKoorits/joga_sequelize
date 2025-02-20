@@ -18,7 +18,21 @@ const getAllArticles = async (req, res) => {
     });
 };
 
+// get article by slug
+const getArticleBySlug = async (req, res) => {
+  Article.findOne({ where: { slug: req.params.slug } })
+    .then((article) => {
+      console.log(article);
+      return res.status(200).json(article);
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).json({ message: "Error occurred" });
+    });
+};
+
 // export controller
 module.exports = {
-  getAllArticles, // Veendu, et route fail kasutab õiget nime
+  getAllArticles,
+  getArticleBySlug,
 };
