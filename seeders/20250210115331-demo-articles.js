@@ -1,5 +1,7 @@
 "use strict";
 
+const author = require("../models/author");
+
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return Promise.all([
@@ -10,6 +12,7 @@ module.exports = {
           image: "ashtanga.jpg",
           body: "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>",
           published: "2020-01-08 15:02:30",
+          author_id: 1,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -21,6 +24,7 @@ module.exports = {
           image: "morning.jpg",
           body: "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>",
           published: "2020-04-14 15:02:41",
+          author_id: 3,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -32,6 +36,7 @@ module.exports = {
           image: "yoga-teacher.jpg",
           body: "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>",
           published: "2060-05-28 15:02:55",
+          author_id: 1,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
