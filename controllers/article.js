@@ -1,48 +1,55 @@
-// get connection to database ORM object
-const Sequelize = require("sequelize");
-const sequelize = new Sequelize("mysql://root:@localhost:3306/joga_sequelize");
-
-// read model data
-const Article = require("../models/article")(sequelize, Sequelize.DataTypes);
-
-// read model data for table representation
 const models = require("../models");
 
-// get all data
-const getAllArticles = async (req, res) => {
-  models.Article.findAll()
-    .then((articles) => {
-      console.log(articles);
-      return res.status(200).json(articles);
-    })
-    .catch((err) => {
-      console.log(err);
-      return res.status(500).json({ message: "Error occurred" });
-    });
-};
+class articleController {
+  async getAllArticles(req, res) {
+    try {
+      const articles = await models.Article.findAll({
+        include: [
+          {
+            model: models.Author,
+            as: "Author",
+          },
+          {
+            model: models.Tag,
+            as: "Tags",
+            through: { attributes: [] }, // Exclude ArticleTags from the result
+          },
+        ],
+      });
+      res.status(200).json(articles);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Error occurred" });
+    }
+  }
 
-// get article by slug
-const getArticleBySlug = async (req, res) => {
-  models.Article.findOne({
-    where: { slug: req.params.slug },
-    include: [
-      {
-        model: models.Author,
-      },
-    ],
-  })
-    .then((article) => {
-      console.log(article);
-      return res.status(200).json(article);
-    })
-    .catch((err) => {
-      console.log(err);
-      return res.status(500).json({ message: "Error occurred" });
-    });
-};
+  async getArticleBySlug(req, res) {
+    try {
+      const article = await models.Article.findOne({
+        where: { slug: req.params.slug },
+        include: [
+          {
+            model: models.Author,
+            as: "Author",
+          },
+          {
+            model: models.Tag,
+            as: "Tags",
+            through: { attributes: [] }, // Exclude ArticleTags from the result
+          },
+        ],
+      });
 
-// export controller
-module.exports = {
-  getAllArticles,
-  getArticleBySlug,
-};
+      if (!article) {
+        return res.status(404).json({ message: "Article not found" });
+      }
+
+      res.status(200).json(article);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Error occurred" });
+    }
+  }
+}
+
+module.exports = new articleController();
