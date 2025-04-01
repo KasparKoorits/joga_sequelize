@@ -4,6 +4,7 @@ NBA Higher or Lower is a web-based game where users guess which NBA player has h
 ## Features
 - **User Authentication**
 - **Game Modes**:
+  - Compare players' career PPG
   - Compare players' career FG%.
   - Compare players' career 3PT%.
   - Compare players' 2K ratings.
